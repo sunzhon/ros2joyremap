@@ -108,6 +108,7 @@ class JoyRemap(Node):
                     ]
 
         self.speed_gain = 1.0
+        self.user_msg =  UserCommand()
 
     def callback(self, in_msg):
         out_msg = Joy(header=in_msg.header)
@@ -138,24 +139,29 @@ class JoyRemap(Node):
                 raise e
 
         # fill twist msg
-        user_msg =  UserCommand()
-        user_msg.vx = out_msg.axes[0]
-        user_msg.vy = out_msg.axes[1]
-        user_msg.wz = out_msg.axes[2]
+        self.user_msg.vx = out_msg.axes[0]
+        self.user_msg.vy = out_msg.axes[1]
+        self.user_msg.wz = out_msg.axes[2]
         
-        if out_msg.buttons[9]==1:
-            user_msg.motion_mode=-1 # turn off 
-
+        if out_msg.buttons[0]==1:
+            self.user_msg.motion_mode=3 # reset model
+        elif out_msg.buttons[4]==1:
+            self.user_msg.motion_mode=1 # stand
+        elif out_msg.buttons[5]==1:
+            self.user_msg.motion_mode=2 # walk
+        elif out_msg.buttons[9]==1:
+            self.user_msg.motion_mode=-1 # turn off 
 
         # pub message
-        self.pub_joycmd.publish(user_msg)
+        self.pub_joycmd.publish(self.user_msg)
 
 
 def main():
     rclpy.init()
     node = JoyRemap(namespace="/ambotw1_ns")
     while rclpy.ok():
-        rclpy.spin(node)
+        rclpy.spin_once(node,timeout_sec=0.)
+    node.destroy_node()
     rclpy.shutdown()
 
 
