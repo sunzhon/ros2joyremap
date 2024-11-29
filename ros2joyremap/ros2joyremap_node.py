@@ -77,16 +77,18 @@ class JoyRemap(Node):
             history=2
         )
 
+        joy_cmd_topic = "/joy_cmd" if namespace is None else namespace+"/joy_cmd"
         self.pub_joycmd = self.create_publisher(
             UserCommand,
-            namespace+"/joy_cmd",
+            joy_cmd_topic,
             qos_profile
         )
 
         # ROS2 subscribers
+        joy_topic = "/joy" if namespace is None else namespace+"/joy"
         self.sub_joy = self.create_subscription(
             Joy,
-            namespace+"/joy",
+            joy_topic,
             self.callback,
             1
         )
