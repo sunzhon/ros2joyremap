@@ -99,7 +99,7 @@ class JoyRemap(Node):
         self.axes = self.get_parameter('axes').get_parameter_value().string_value
         self.buttons = self.get_parameter('buttons').get_parameter_value().string_value
 
-        self.get_logger().warn(f"axes: {self.axes}")
+        #self.get_logger().warn(f"axes: {self.axes}")
 
         if self.axes=="":
             self.axes = ["axes[1]","axes[0]","axes[2]", "axes[3]","axes[4]"]
@@ -162,8 +162,8 @@ def main():
     rclpy.init()
     node = JoyRemap(namespace="/ambotw1_ns")
     while rclpy.ok():
-        rclpy.spin_once(node,timeout_sec=0.)
-    node.destroy_node()
+        rclpy.spin_once(node, timeout_sec=0.01)
+    #node.destroy_node()
     rclpy.shutdown()
 
 

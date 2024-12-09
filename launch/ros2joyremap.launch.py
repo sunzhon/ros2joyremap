@@ -30,7 +30,7 @@ def generate_launch_description():
             [
             joy_node,
             joyremap_node,
-        launch.actions.RegisterEventHandler(
+            launch.actions.RegisterEventHandler(
             event_handler=launch.event_handlers.OnProcessExit(
                 target_action=joyremap_node,
                 on_exit=[launch.actions.EmitEvent(
